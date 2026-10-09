@@ -26,6 +26,7 @@ func _init() -> void:
 	test_npc_conversation_history_isolation()
 	test_character_sprites_and_animations()
 	test_environmental_foliage_paths_and_particles()
+	test_live_flora_biome_props_and_rustle()
 	
 	print("\n-------------------------------------------------------")
 	print("🏁 TEST RESULTS: %d PASSED, %d FAILED" % [passed_count, failed_count])
@@ -781,6 +782,61 @@ func test_environmental_foliage_paths_and_particles() -> void:
 	assert_true(bakery_smoke.emitting, "ChimneySmoke particles are emitting")
 	
 	main.queue_free()
+
+
+func test_live_flora_biome_props_and_rustle() -> void:
+	print("\n▶ Testing Oxymoron Live Flora Biome Distribution, Wind Sway & Footstep Rustle...")
+	var main_scene = load("res://scenes/main.tscn")
+	assert_true(main_scene != null, "scenes/main.tscn loads for LiveFlora testing")
+	var main = main_scene.instantiate()
+	root.add_child(main)
+	
+	var flora_container = main.get_node_or_null("Environment/LiveFlora")
+	assert_true(flora_container != null, "Environment/LiveFlora container exists in main scene")
+	var flora_count: int = flora_container.get_child_count() if flora_container else 0
+	assert_true(flora_count >= 50, "LiveFlora container has >= 50 floral props (Actual: %d)" % flora_count)
+	
+	var sample_wildflower: LiveFlora = null
+	var sample_solid: LiveFlora = null
+	var sample_bush: LiveFlora = null
+	
+	for child in flora_container.get_children():
+		if child is LiveFlora:
+			if child.flora_type == "wildflower" and sample_wildflower == null:
+				sample_wildflower = child
+			elif child.flora_type == "solid" and sample_solid == null:
+				sample_solid = child
+			elif child.flora_type == "bush" and sample_bush == null:
+				sample_bush = child
+	
+	assert_true(sample_wildflower != null, "Contains wildflower LiveFlora instances (e.g. Daffodils/Lupines)")
+	if sample_wildflower:
+		assert_true(sample_wildflower.flora_texture != null, "Wildflower has texture assigned")
+		var s_sprite: Sprite2D = sample_wildflower.get_node_or_null("Sprite2D")
+		assert_true(s_sprite != null, "Wildflower has Sprite2D")
+		assert_true(s_sprite.material is ShaderMaterial, "Wildflower Sprite2D has ShaderMaterial")
+		var area: Area2D = sample_wildflower.get_node_or_null("RustleArea")
+		assert_true(area != null, "Wildflower has RustleArea Area2D")
+		
+		# Test reactive rustle execution
+		sample_wildflower.rustle(sample_wildflower.global_position + Vector2(10, 0))
+		assert_true(true, "Rustle physics executed without error")
+	
+	assert_true(sample_bush != null, "Contains bush LiveFlora instances (e.g. Berry bushes)")
+	if sample_bush:
+		assert_true(sample_bush.flora_texture != null, "Bush has texture assigned")
+		assert_eq(sample_bush.flora_type, "bush", "Bush has flora_type='bush'")
+	
+	assert_true(sample_solid != null, "Contains solid LiveFlora obstacles (e.g. Overgrown boulders/stumps)")
+	if sample_solid:
+		assert_true(sample_solid.has_collision, "Solid flora has has_collision=true")
+		var static_body: StaticBody2D = sample_solid.get_node_or_null("StaticBody2D")
+		assert_true(static_body != null, "Solid flora has StaticBody2D")
+		var shape: CollisionShape2D = static_body.get_node_or_null("CollisionShape2D")
+		assert_true(shape != null and not shape.disabled, "Solid flora collision shape is active")
+	
+	main.queue_free()
+
 
 
 

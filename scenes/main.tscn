@@ -36,6 +36,50 @@
 [ext_resource type="Texture2D" path="res://assets/village_top_down/details/pebbles_2.png" id="34_peb2"]
 [ext_resource type="Texture2D" path="res://assets/village_top_down/details/cracked_earth.png" id="35_crack"]
 
+[ext_resource type="PackedScene" path="res://assets/objects/live_flora.tscn" id="36_liveflora"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_boulder_buttercups.png" id="37_flora_boulder_buttercups"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_bush_blueberries.png" id="38_flora_bush_blueberries"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_bush_dense.png" id="39_flora_bush_dense"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_bush_orangeberries.png" id="40_flora_bush_orangeberries"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_bush_pinkflowers.png" id="41_flora_bush_pinkflowers"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_buttercup_mound.png" id="42_flora_buttercup_mound"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_clover_pink.png" id="43_flora_clover_pink"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_daffodil_orange.png" id="44_flora_daffodil_orange"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_daffodil_yellow.png" id="45_flora_daffodil_yellow"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_daisy_cluster.png" id="46_flora_daisy_cluster"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_daisy_tall.png" id="47_flora_daisy_tall"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_exotic_fungus.png" id="48_flora_exotic_fungus"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_fern_leafy.png" id="49_flora_fern_leafy"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_fern_tall.png" id="50_flora_fern_tall"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_foxglove_tall.png" id="51_flora_foxglove_tall"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_goldenrod.png" id="52_flora_goldenrod"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_hanging_planter.png" id="53_flora_hanging_planter"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_hosta_blooming.png" id="54_flora_hosta_blooming"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_hosta_broadleaf.png" id="55_flora_hosta_broadleaf"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_lavender_purple.png" id="56_flora_lavender_purple"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_log_mossy.png" id="57_flora_log_mossy"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_log_toadstools.png" id="58_flora_log_toadstools"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_lupine_blue.png" id="59_flora_lupine_blue"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_lupine_pink.png" id="60_flora_lupine_pink"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_lupine_purple.png" id="61_flora_lupine_purple"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_orange_blossom.png" id="62_flora_orange_blossom"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_peach_blossom.png" id="63_flora_peach_blossom"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_pink_buds.png" id="64_flora_pink_buds"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_potted_herbs.png" id="65_flora_potted_herbs"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_skull_wildflowers.png" id="66_flora_skull_wildflowers"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_spider_plant.png" id="67_flora_spider_plant"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_spiky_grass_orange.png" id="68_flora_spiky_grass_orange"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_spiky_grass_red.png" id="69_flora_spiky_grass_red"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_strawberry_flowering.png" id="70_flora_strawberry_flowering"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_strawberry_patch.png" id="71_flora_strawberry_patch"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_stump_fungus.png" id="72_flora_stump_fungus"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_stump_hollow_daisies.png" id="73_flora_stump_hollow_daisies"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_stump_mossy.png" id="74_flora_stump_mossy"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_stump_pink_mushrooms.png" id="75_flora_stump_pink_mushrooms"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_vine_white.png" id="76_flora_vine_white"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_water_lilies.png" id="77_flora_water_lilies"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_white_lily.png" id="78_flora_white_lily"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_grass_bg"]
 shader = ExtResource("27_shader_grass")
 shader_parameter/wind_speed = 1.1
@@ -486,6 +530,301 @@ tuft_type = "clover"
 [node name="Tuft_TreeCedric" parent="Environment/GrassTufts" instance=ExtResource("29_tuft")]
 position = Vector2(945, 175)
 tuft_type = "wildflower_blue"
+
+[node name="LiveFlora" type="Node2D" parent="Environment"]
+
+[node name="Plaza_Daffodil1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(430, 335)
+flora_texture = ExtResource("45_flora_daffodil_yellow")
+flora_type = "wildflower"
+
+[node name="Plaza_Daffodil2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(445, 360)
+flora_texture = ExtResource("45_flora_daffodil_yellow")
+flora_type = "wildflower"
+
+[node name="Plaza_DaffodilOrange1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(520, 335)
+flora_texture = ExtResource("44_flora_daffodil_orange")
+flora_type = "wildflower"
+
+[node name="Plaza_DaffodilOrange2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(535, 360)
+flora_texture = ExtResource("44_flora_daffodil_orange")
+flora_type = "wildflower"
+
+[node name="Plaza_Daisy1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(470, 380)
+flora_texture = ExtResource("46_flora_daisy_cluster")
+flora_type = "wildflower"
+
+[node name="Plaza_Daisy2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(495, 380)
+flora_texture = ExtResource("46_flora_daisy_cluster")
+flora_type = "wildflower"
+
+[node name="Plaza_Lavender1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(380, 310)
+flora_texture = ExtResource("56_flora_lavender_purple")
+flora_type = "wildflower"
+
+[node name="Plaza_Lavender2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(400, 310)
+flora_texture = ExtResource("56_flora_lavender_purple")
+flora_type = "wildflower"
+
+[node name="Plaza_LupineBlue1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(575, 310)
+flora_texture = ExtResource("59_flora_lupine_blue")
+flora_type = "wildflower"
+
+[node name="Plaza_LupineBlue2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(595, 310)
+flora_texture = ExtResource("59_flora_lupine_blue")
+flora_type = "wildflower"
+
+[node name="Plaza_Goldenrod1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(650, 320)
+flora_texture = ExtResource("52_flora_goldenrod")
+flora_type = "wildflower"
+
+[node name="Plaza_Goldenrod2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(680, 320)
+flora_texture = ExtResource("52_flora_goldenrod")
+flora_type = "wildflower"
+
+[node name="Plaza_Well_Lilies" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(480, 350)
+flora_texture = ExtResource("77_flora_water_lilies")
+flora_type = "ground"
+
+[node name="Bakery_Strawberry1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(145, 175)
+flora_texture = ExtResource("71_flora_strawberry_patch")
+flora_type = "ground"
+
+[node name="Bakery_Strawberry2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(165, 175)
+flora_texture = ExtResource("70_flora_strawberry_flowering")
+flora_type = "ground"
+
+[node name="Bakery_Hosta1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(125, 230)
+flora_texture = ExtResource("55_flora_hosta_broadleaf")
+flora_type = "bush"
+
+[node name="Bakery_Hosta2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(125, 260)
+flora_texture = ExtResource("54_flora_hosta_blooming")
+flora_type = "wildflower"
+
+[node name="Bakery_PottedHerbs" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(215, 185)
+flora_texture = ExtResource("65_flora_potted_herbs")
+flora_type = "solid"
+
+[node name="Bakery_DaisyTall1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(235, 235)
+flora_texture = ExtResource("47_flora_daisy_tall")
+flora_type = "wildflower"
+
+[node name="Bakery_DaisyTall2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(235, 275)
+flora_texture = ExtResource("47_flora_daisy_tall")
+flora_type = "wildflower"
+
+[node name="Barnaby_BlueberryBush" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(515, 225)
+flora_texture = ExtResource("38_flora_bush_blueberries")
+flora_type = "bush"
+
+[node name="Barnaby_OrangeberryBush" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(585, 225)
+flora_texture = ExtResource("40_flora_bush_orangeberries")
+flora_type = "bush"
+
+[node name="Barnaby_SpiderPlant" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(515, 265)
+flora_texture = ExtResource("67_flora_spider_plant")
+flora_type = "bush"
+
+[node name="Barnaby_HangingPlanter" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(440, 240)
+flora_texture = ExtResource("53_flora_hanging_planter")
+flora_type = "solid"
+
+[node name="Barnaby_ExoticFungus" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(605, 265)
+flora_texture = ExtResource("48_flora_exotic_fungus")
+flora_type = "wildflower"
+
+[node name="Barnaby_PeachBlossom" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(625, 240)
+flora_texture = ExtResource("63_flora_peach_blossom")
+flora_type = "wildflower"
+
+[node name="Chapel_WhiteLily1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(240, 480)
+flora_texture = ExtResource("78_flora_white_lily")
+flora_type = "wildflower"
+
+[node name="Chapel_WhiteLily2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(240, 520)
+flora_texture = ExtResource("78_flora_white_lily")
+flora_type = "wildflower"
+
+[node name="Chapel_WhiteVine" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(320, 480)
+flora_texture = ExtResource("76_flora_vine_white")
+flora_type = "wildflower"
+
+[node name="Chapel_Fern1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(235, 560)
+flora_texture = ExtResource("50_flora_fern_tall")
+flora_type = "bush"
+
+[node name="Chapel_Fern2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(325, 560)
+flora_texture = ExtResource("49_flora_fern_leafy")
+flora_type = "bush"
+
+[node name="Chapel_StumpDaisies" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(330, 520)
+flora_texture = ExtResource("73_flora_stump_hollow_daisies")
+flora_type = "solid"
+has_collision = true
+
+[node name="Chapel_RelicSkull" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(330, 470)
+flora_texture = ExtResource("66_flora_skull_wildflowers")
+flora_type = "solid"
+has_collision = true
+
+[node name="Arthur_PinkToadstools" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(240, 600)
+flora_texture = ExtResource("75_flora_stump_pink_mushrooms")
+flora_type = "solid"
+has_collision = true
+
+[node name="Cedric_LupinePurple1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(735, 175)
+flora_texture = ExtResource("61_flora_lupine_purple")
+flora_type = "wildflower"
+
+[node name="Cedric_LupinePurple2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(755, 175)
+flora_texture = ExtResource("61_flora_lupine_purple")
+flora_type = "wildflower"
+
+[node name="Cedric_LupinePink1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(790, 175)
+flora_texture = ExtResource("60_flora_lupine_pink")
+flora_type = "wildflower"
+
+[node name="Cedric_Foxglove1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(820, 175)
+flora_texture = ExtResource("51_flora_foxglove_tall")
+flora_type = "wildflower"
+
+[node name="Cedric_Foxglove2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(880, 175)
+flora_texture = ExtResource("51_flora_foxglove_tall")
+flora_type = "wildflower"
+
+[node name="Cedric_PinkBush1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(920, 140)
+flora_texture = ExtResource("41_flora_bush_pinkflowers")
+flora_type = "bush"
+
+[node name="Cedric_PinkBush2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(920, 240)
+flora_texture = ExtResource("41_flora_bush_pinkflowers")
+flora_type = "bush"
+
+[node name="Cedric_CloverPink" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(810, 270)
+flora_texture = ExtResource("43_flora_clover_pink")
+flora_type = "ground"
+
+[node name="Vault_DenseBush1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(745, 415)
+flora_texture = ExtResource("39_flora_bush_dense")
+flora_type = "bush"
+
+[node name="Vault_DenseBush2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(745, 465)
+flora_texture = ExtResource("39_flora_bush_dense")
+flora_type = "bush"
+
+[node name="Vault_FallenLog1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(810, 485)
+flora_texture = ExtResource("58_flora_log_toadstools")
+flora_type = "solid"
+has_collision = true
+
+[node name="Vault_FallenLog2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(890, 485)
+flora_texture = ExtResource("57_flora_log_mossy")
+flora_type = "solid"
+has_collision = true
+
+[node name="Vault_SpikyGrassRed1" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(940, 465)
+flora_texture = ExtResource("69_flora_spiky_grass_red")
+flora_type = "wildflower"
+
+[node name="Vault_SpikyGrassRed2" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(965, 435)
+flora_texture = ExtResource("69_flora_spiky_grass_red")
+flora_type = "wildflower"
+
+[node name="TreeNW1_Fern" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(30, 95)
+flora_texture = ExtResource("50_flora_fern_tall")
+flora_type = "bush"
+
+[node name="TreeNW2_Buttercups" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(365, 95)
+flora_texture = ExtResource("42_flora_buttercup_mound")
+flora_type = "ground"
+
+[node name="TreeN1_StumpMossy" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(715, 95)
+flora_texture = ExtResource("74_flora_stump_mossy")
+flora_type = "solid"
+has_collision = true
+
+[node name="TreeNE1_Boulder" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(1085, 95)
+flora_texture = ExtResource("37_flora_boulder_buttercups")
+flora_type = "solid"
+has_collision = true
+
+[node name="TreeW1_SpikyOrange" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(65, 385)
+flora_texture = ExtResource("68_flora_spiky_grass_orange")
+flora_type = "wildflower"
+
+[node name="TreeSW1_StumpFungus" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(75, 625)
+flora_texture = ExtResource("72_flora_stump_fungus")
+flora_type = "solid"
+has_collision = true
+
+[node name="TreeS1_OrangeBlossom" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(525, 625)
+flora_texture = ExtResource("62_flora_orange_blossom")
+flora_type = "wildflower"
+
+[node name="TreeS2_PinkBuds" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(785, 625)
+flora_texture = ExtResource("64_flora_pink_buds")
+flora_type = "wildflower"
+
+[node name="TreeCedric_Lavender" parent="Environment/LiveFlora" instance=ExtResource("36_liveflora")]
+position = Vector2(955, 185)
+flora_texture = ExtResource("56_flora_lavender_purple")
+flora_type = "wildflower"
 
 [node name="AmbientWind" type="CPUParticles2D" parent="Environment"]
 position = Vector2(576, 324)

@@ -1,0 +1,46 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/live_flora.gd" id="1_flora"]
+[ext_resource type="Shader" path="res://shaders/wind_sway.gdshader" id="2_shader"]
+[ext_resource type="Texture2D" path="res://assets/flora/flora_daffodil_yellow.png" id="3_tex"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_flora"]
+shader = ExtResource("2_shader")
+shader_parameter/speed = 2.2
+shader_parameter/min_strength = 0.8
+shader_parameter/max_strength = 3.6
+shader_parameter/strength_scale = 1.0
+shader_parameter/interval = 3.0
+shader_parameter/detail = 0.3
+shader_parameter/height_offset = 0.0
+shader_parameter/frequency = 0.018
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_rustle"]
+radius = 16.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_col"]
+radius = 10.0
+
+[node name="LiveFlora" type="Node2D"]
+script = ExtResource("1_flora")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+material = SubResource("ShaderMaterial_flora")
+position = Vector2(0, -12)
+texture = ExtResource("3_tex")
+
+[node name="RustleArea" type="Area2D" parent="."]
+position = Vector2(0, -6)
+collision_layer = 0
+collision_mask = 7
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RustleArea"]
+shape = SubResource("CircleShape2D_rustle")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+process_mode = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, -4)
+shape = SubResource("CircleShape2D_col")
+disabled = true
