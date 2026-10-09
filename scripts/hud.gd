@@ -11,6 +11,21 @@ signal layout_requested
 @onready var trust_label: Label = %TrustLabel
 @onready var advance_day_btn: Button = %AdvanceDayBtn
 @onready var inventory_btn: Button = %InventoryBtn
+@onready var info_btn: Button = %InfoBtn
+@onready var achievements_btn: Button = %AchievementsBtn
+@onready var settings_btn: Button = %SettingsBtn
+
+@onready var info_panel: PanelContainer = %InfoPanel
+@onready var close_info_btn: Button = %CloseInfoBtn
+
+@onready var achievements_panel: PanelContainer = %AchievementsPanel
+@onready var close_achievements_btn: Button = %CloseAchievementsBtn
+@onready var achievements_text: Label = %Text
+
+@onready var settings_panel: PanelContainer = %SettingsPanel
+@onready var close_settings_btn: Button = %CloseSettingsBtn
+@onready var fullscreen_btn: Button = %FullscreenBtn
+
 @onready var toast_panel: PanelContainer = %ToastPanel
 @onready var toast_label: Label = %ToastLabel
 
@@ -21,6 +36,16 @@ func _ready() -> void:
 	toast_panel.visible = false
 	advance_day_btn.pressed.connect(_on_advance_day_pressed)
 	inventory_btn.pressed.connect(_on_inventory_btn_pressed)
+	info_btn.pressed.connect(func(): info_panel.visible = not info_panel.visible; achievements_panel.visible = false; settings_panel.visible = false)
+	close_info_btn.pressed.connect(func(): info_panel.visible = false)
+
+	achievements_btn.pressed.connect(_on_achievements_btn_pressed)
+	close_achievements_btn.pressed.connect(func(): achievements_panel.visible = false)
+
+	settings_btn.pressed.connect(func(): settings_panel.visible = not settings_panel.visible; achievements_panel.visible = false; info_panel.visible = false)
+	close_settings_btn.pressed.connect(func(): settings_panel.visible = false)
+	fullscreen_btn.pressed.connect(_on_fullscreen_pressed)
+
 	
 	var game_state = get_node_or_null("/root/GameState")
 	if game_state:
@@ -71,6 +96,7 @@ func _on_inventory_btn_pressed() -> void:
 		if inv_scene:
 			_inventory_popup = inv_scene.instantiate()
 			add_child(_inventory_popup)
+			move_child(_inventory_popup, 0)
 			var gs = get_node_or_null("/root/GameState")
 			if gs: gs.can_player_move = false
 
@@ -136,3 +162,22 @@ func _format_number(n: int) -> String:
 		res = s[i] + res
 		count += 1
 	return res
+
+func _on_achievements_btn_pressed() -> void:
+	achievements_panel.visible = not achievements_panel.visible
+	info_panel.visible = false
+	settings_panel.visible = false
+	if achievements_panel.visible:
+		var gs = get_node_or_null("/root/GameState")
+		if gs:
+			var txt = "- Current Kurtos: " + str(gs.player_kurtos) + " / " + str(gs.goal_kurtos) + "\n"
+			txt += "- Days Elapsed: " + str(gs.current_day) + "\n"
+			txt += "- Reputation: " + str(gs.overall_trust) + "%\n"
+			txt += "- Items Collected: " + str(gs.inventory.size()) + "\n"
+			achievements_text.text = txt
+
+func _on_fullscreen_pressed() -> void:
+	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)

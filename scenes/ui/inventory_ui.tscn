@@ -24,15 +24,15 @@ color = Color(0, 0, 0, 0.6)
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -200.0
-offset_right = 300.0
-offset_bottom = 200.0
+anchors_preset = 15
+anchor_left = 0.1
+anchor_top = 0.15
+anchor_right = 0.9
+anchor_bottom = 0.9
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -70,6 +70,7 @@ grow_vertical = 2
 [node name="LeftScroll" type="ScrollContainer" parent="Panel/HBox"]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 3
 size_flags_stretch_ratio = 1.5
 
 [node name="ItemGrid" type="GridContainer" parent="Panel/HBox/LeftScroll"]
@@ -100,6 +101,19 @@ text = "Select an item"
 horizontal_alignment = 1
 autowrap_mode = 2
 
+[node name="ItemRarityLabel" type="Label" parent="Panel/HBox/RightDetails"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.7, 0.7, 1)
+text = "Rarity: Common"
+horizontal_alignment = 1
+
+[node name="ItemQuantityLabel" type="Label" parent="Panel/HBox/RightDetails"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Quantity: 1"
+horizontal_alignment = 1
+
 [node name="ItemDescLabel" type="Label" parent="Panel/HBox/RightDetails"]
 unique_name_in_owner = true
 layout_mode = 2
@@ -107,7 +121,29 @@ size_flags_vertical = 3
 text = "Hover or tap an item to see its details here."
 autowrap_mode = 2
 
-[node name="EquipBtn" type="Button" parent="Panel/HBox/RightDetails"]
+[node name="ItemEffectLabel" type="Label" parent="Panel/HBox/RightDetails"]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Inspect"
+text = "Effect: None"
+autowrap_mode = 2
+
+[node name="ItemDurationLabel" type="Label" parent="Panel/HBox/RightDetails"]
+unique_name_in_owner = true
+layout_mode = 2
+text = ""
+autowrap_mode = 2
+
+[node name="HBoxButtons" type="HBoxContainer" parent="Panel/HBox/RightDetails"]
+layout_mode = 2
+
+[node name="EquipBtn" type="Button" parent="Panel/HBox/RightDetails/HBoxButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Use"
+
+[node name="CancelBtn" type="Button" parent="Panel/HBox/RightDetails/HBoxButtons"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"

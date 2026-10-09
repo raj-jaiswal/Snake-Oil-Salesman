@@ -99,10 +99,128 @@ layout_mode = 2
 text = "Inventory"
 icon = ExtResource("icon_Inventory")
 
+[node name="InfoBtn" type="Button" parent="TopPanel/Ledger/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Info"
+
+[node name="AchievementsBtn" type="Button" parent="TopPanel/Ledger/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Trophy"
+
+[node name="SettingsBtn" type="Button" parent="TopPanel/Ledger/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Settings"
+
 [node name="AdvanceDayBtn" type="Button" parent="TopPanel/Ledger/HBox"]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Advance Day"
+
+
+
+[node name="InfoPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+
+[node name="VBox" type="VBoxContainer" parent="InfoPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="InfoPanel/VBox"]
+layout_mode = 2
+text = "Game Info"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="InfoPanel/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Objective: Accumulate 1,000,000 Kurtos in 30 days!
+Controls: WASD/Arrows to move, E to interact, I for Inventory.
+Good luck!"
+autowrap_mode = 2
+
+[node name="CloseInfoBtn" type="Button" parent="InfoPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
+
+[node name="AchievementsPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -150.0
+offset_right = 200.0
+offset_bottom = 150.0
+
+[node name="VBox" type="VBoxContainer" parent="AchievementsPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="AchievementsPanel/VBox"]
+layout_mode = 2
+text = "Achievements"
+horizontal_alignment = 1
+
+[node name="Text" type="Label" parent="AchievementsPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "Tracking..."
+autowrap_mode = 2
+
+[node name="CloseAchievementsBtn" type="Button" parent="AchievementsPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
+
+[node name="SettingsPanel" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+
+[node name="VBox" type="VBoxContainer" parent="SettingsPanel"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="FullscreenBtn" type="Button" parent="SettingsPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Toggle Fullscreen"
+
+[node name="CloseSettingsBtn" type="Button" parent="SettingsPanel/VBox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Close"
 
 
 [node name="ToastPanel" type="PanelContainer" parent="."]
