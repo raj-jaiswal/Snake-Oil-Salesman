@@ -28,6 +28,10 @@ var conversation_histories_by_npc: Dictionary = {} # npc_id (String) -> Array[St
 var _last_sent_text: String = ""
 var _last_sent_category: Dictionary = {}
 var mobile_input: bool = false
+var _waiting_for_reply := false
+var _pending_request_id := 0
+var _pending_npc: Node2D
+var _pending_history: Array = []
 
 
 func get_npc_id(npc: Node2D) -> String:
@@ -46,11 +50,11 @@ func get_active_npc_history() -> Array:
 	if active_npc == null:
 		return []
 	var npc_id := get_npc_id(active_npc)
-	if not conversation_histories_by_npc.has(npc_id):
-		if "conversation_history" in active_npc and active_npc.conversation_history is Array:
-			conversation_histories_by_npc[npc_id] = (active_npc.conversation_history as Array).duplicate()
-		else:
-			conversation_histories_by_npc[npc_id] = []
+	if "conversation_history" in active_npc and active_npc.conversation_history is Array:
+		# Reuse the NPC-owned array so its existing day-reset rules apply here too.
+		conversation_histories_by_npc[npc_id] = active_npc.conversation_history
+	if not conversation_histories_by_npc.get(npc_id) is Array:
+		conversation_histories_by_npc[npc_id] = []
 	return conversation_histories_by_npc[npc_id]
 
 
@@ -62,6 +66,8 @@ var conversation_history: Array:
 		if active_npc:
 			var npc_id := get_npc_id(active_npc)
 			conversation_histories_by_npc[npc_id] = val
+			if "conversation_history" in active_npc:
+				active_npc.conversation_history = val
 
 
 func _ensure_ui_nodes() -> void:
@@ -221,6 +227,7 @@ func _on_chat_prompt_pressed() -> void:
 
 func start_conversation(npc: Node2D) -> void:
 	_ensure_ui_nodes()
+	_cancel_pending_reply()
 	active_npc = npc
 	
 	# Check refusal lock-out
@@ -273,18 +280,18 @@ func start_conversation(npc: Node2D) -> void:
 	# Show dialogue log specific to THIS NPC ONLY
 	var history := get_active_npc_history()
 	if dialogue_text:
-		dialogue_text.text = "[color=#f5d76e][b]%s[/b]:[/color] \"%s\"" % [name_str, greeting]
+		dialogue_text.text = "" if not history.is_empty() else "[color=#f5d76e][b]%s[/b]:[/color] \"%s\"" % [_display_text(name_str), _display_text(greeting)]
 		for entry in history:
 			var line_str := str(entry)
 			if line_str.begins_with("PLAYER: "):
 				var p_text = line_str.substr(8).trim_prefix("\"").trim_suffix("\"")
-				dialogue_text.text += "\n\n[color=#d8ba83][b]You:[/b][/color] \"%s\"" % p_text
+				dialogue_text.text += "\n\n[color=#d8ba83][b]You:[/b][/color] \"%s\"" % _display_text(p_text)
 			else:
 				var colon_idx = line_str.find(": ")
 				if colon_idx != -1:
 					var spkr = line_str.substr(0, colon_idx)
 					var r_text = line_str.substr(colon_idx + 2).trim_prefix("\"").trim_suffix("\"")
-					dialogue_text.text += "\n\n[color=#f5d76e][b]%s:[/b][/color] \"%s\"" % [spkr, r_text]
+					dialogue_text.text += "\n\n[color=#f5d76e][b]%s:[/b][/color] \"%s\"" % [_display_text(spkr), _display_text(r_text)]
 	
 	if message_input:
 		message_input.text = ""
@@ -317,6 +324,7 @@ func _update_header_stats() -> void:
 
 func end_conversation() -> void:
 	_ensure_ui_nodes()
+	_cancel_pending_reply()
 	is_chatting = false
 	if chat_window:
 		chat_window.visible = false
@@ -406,6 +414,8 @@ func _on_pitch_pressed() -> void:
 
 
 func _on_send_pressed() -> void:
+	if _waiting_for_reply or not is_chatting:
+		return
 	var text := message_input.text.strip_edges()
 	if text.is_empty() or active_npc == null:
 		return
@@ -424,9 +434,12 @@ func _on_send_pressed() -> void:
 		message_input.release_focus()
 	
 	var cur_history := get_active_npc_history()
-	cur_history.append("PLAYER: \"%s\"" % text)
+	var request_history := cur_history.duplicate()
+	_pending_history = request_history
 	if active_npc and active_npc.has_method("add_conversation_turn"):
 		active_npc.add_conversation_turn("PLAYER", text)
+	else:
+		cur_history.append("PLAYER: \"%s\"" % text)
 	
 	message_input.text = ""
 	
@@ -435,11 +448,13 @@ func _on_send_pressed() -> void:
 		send_btn.disabled = true
 	if pitch_btn:
 		pitch_btn.disabled = true
+	_waiting_for_reply = true
+	_pending_npc = active_npc
 	
 	var name_str: String = str(active_npc.get("npc_name")) if "npc_name" in active_npc else "Resident"
 	
 	# Append player message into the visible chatbox log
-	dialogue_text.text += "\n\n[color=#d8ba83][b]You:[/b][/color] \"%s\"" % text
+	dialogue_text.text += "\n\n[color=#d8ba83][b]You:[/b][/color] \"%s\"" % _display_text(text)
 	dialogue_text.text += "\n[color=#b8aa93][i]%s is considering your words...[/i][/color]" % name_str
 	_scroll_dialogue_to_bottom()
 	
@@ -448,10 +463,25 @@ func _on_send_pressed() -> void:
 	
 	var profile: Dictionary = active_npc.get_full_profile() if active_npc.has_method("get_full_profile") else {}
 	if local_llm and local_llm.has_method("request_reply"):
-		local_llm.request_reply(profile, text, cur_history, _last_sent_category)
+		var id: Variant = local_llm.call("request_reply", profile, text, request_history, _last_sent_category)
+		_pending_request_id = int(id) if id is int else -1
+		if _pending_request_id == 0:
+			_on_llm_response_error("Local chat is busy; please retry.")
+	else:
+		_on_llm_response_error("Local chat is unavailable.")
 
 
 func _on_llm_response_generated(result: Dictionary) -> void:
+	if not _waiting_for_reply or not is_chatting or active_npc != _pending_npc:
+		return
+	if _pending_request_id > 0 and (int(result.get("request_id", 0)) != _pending_request_id or str(result.get("npc_id", "")) != get_npc_id(active_npc)):
+		return
+	_waiting_for_reply = false
+	_pending_request_id = 0
+	_pending_npc = null
+	_pending_history = []
+	var replying_npc := active_npc
+	var cur_history := get_active_npc_history()
 	if send_btn:
 		send_btn.disabled = false
 	if pitch_btn:
@@ -476,14 +506,14 @@ func _on_llm_response_generated(result: Dictionary) -> void:
 		else:
 			reply = "I cannot spare any Kurtos right now."
 	
-	var name_str: String = str(active_npc.get("npc_name")) if "npc_name" in active_npc else "Resident"
+	var name_str: String = str(replying_npc.get("npc_name")) if "npc_name" in replying_npc else "Resident"
 	
 	# Strip temporary "is considering your words..." text
 	var thinking_tag := "\n[color=#b8aa93][i]%s is considering your words...[/i][/color]" % name_str
 	dialogue_text.text = dialogue_text.text.replace(thinking_tag, "")
 	
 	# Display reply in the chatbox log
-	dialogue_text.text += "\n\n[color=#f5d76e][b]%s:[/b][/color] \"%s\"" % [name_str, reply]
+	dialogue_text.text += "\n\n[color=#f5d76e][b]%s:[/b][/color] \"%s\"" % [_display_text(name_str), _display_text(reply)]
 	
 	var feedback: String = str(eval_res.get("feedback_message", ""))
 	if not feedback.is_empty():
@@ -499,15 +529,16 @@ func _on_llm_response_generated(result: Dictionary) -> void:
 	_scroll_dialogue_to_bottom()
 	
 	# Also update world-space speech bubble if visible
-	if active_npc.has_method("show_speech"):
-		active_npc.show_speech(reply, name_str)
+	if replying_npc.has_method("show_speech"):
+		replying_npc.show_speech(reply, name_str)
 	
-	var cur_history := get_active_npc_history()
-	cur_history.append("%s: \"%s\"" % [name_str, reply])
-	if cur_history.size() > 10:
+	if replying_npc.has_method("add_conversation_turn"):
+		replying_npc.add_conversation_turn(name_str, reply)
+	else:
+		cur_history.append("%s: \"%s\"" % [name_str, reply])
+	var turns: int = clampi(local_llm.history_exchanges, 1, 5) * 2 if local_llm is LocalLLM else 10
+	while cur_history.size() > turns:
 		cur_history.pop_front()
-	if active_npc.has_method("add_conversation_turn"):
-		active_npc.add_conversation_turn(name_str, reply)
 	
 	if is_chatting:
 		_update_header_stats()
@@ -586,6 +617,9 @@ func _scroll_dialogue_to_bottom() -> void:
 
 
 func _on_llm_response_error(err: String) -> void:
+	if not _waiting_for_reply:
+		return
+	_cancel_pending_reply()
 	if send_btn:
 		send_btn.disabled = false
 	if pitch_btn:
@@ -626,5 +660,29 @@ func _update_llm_status_ui(connected: bool, status_text: String) -> void:
 		llm_status_btn.tooltip_text = "AI Connected (%s)\nClick to recheck status." % status_text
 	else:
 		llm_status_btn.text = "🟠 AI: Offline"
-		llm_status_btn.tooltip_text = "Local LLM offline (using fallback persona logic).\nRun: ollama serve\nClick to retry."
+		llm_status_btn.tooltip_text = "Local chat uses canned replies while offline.\nStart llama-server separately, then click to retry."
+
+
+func _display_text(text: String) -> String:
+	# Player/model brackets are rendered literally, never as BBCode/images/URLs.
+	return text.replace("[", "[lb]")
+
+
+func _cancel_pending_reply() -> void:
+	if _waiting_for_reply and is_instance_valid(_pending_npc):
+		var history := get_active_npc_history()
+		if not history.is_empty() and str(history.back()) == "PLAYER: \"%s\"" % _last_sent_text:
+			# NPC.add_conversation_turn may have evicted the oldest turn at its cap.
+			# Restore the complete pre-request history, unless a day reset cleared it.
+			history.assign(_pending_history)
+	if local_llm and local_llm.has_method("cancel_request"):
+		local_llm.cancel_request()
+	_waiting_for_reply = false
+	_pending_request_id = 0
+	_pending_npc = null
+	_pending_history = []
+	if send_btn:
+		send_btn.disabled = false
+	if pitch_btn:
+		pitch_btn.disabled = false
 

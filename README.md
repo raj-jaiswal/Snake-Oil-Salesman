@@ -103,6 +103,7 @@ A failed scam should create consequences, new dialogue, suspicion, comedy, or al
 | `docs/DATA_SCHEMAS.md` | Recommended data structures and resource/JSON schemas |
 | `docs/CONTENT_GUIDE.md` | Rules for creating NPCs, items, scams, locations, and dialogue content |
 | `docs/UI_STYLE.md` | Medieval UI assets, theme, screen inventory, and presentation checks |
+| `docs/LOCAL_LLM_CHAT.md` | Implemented Qwen dialogue integration, configuration, startup, and isolated tests |
 | `docs/ROADMAP.md` | Milestones and implementation order |
 | `AGENTS.md` | Rules for coding agents working on the repository |
 | `ai/LOCAL_MODEL_PLAN.md` | Local LLM integration strategy and performance constraints |

@@ -1,5 +1,10 @@
 # Local Model Plan
 
+The current Windows implementation uses the existing Qwen 2.5 0.5B GGUF through
+llama.cpp HTTP chat completions for dialogue only. See
+[Local NPC chat](../docs/LOCAL_LLM_CHAT.md) for configuration and verified tests.
+The remaining sections describe broader future plans, not the current reply contract.
+
 ## Goal
 
 Run the NPC language model locally so the final game does not require a paid cloud AI service for normal gameplay.

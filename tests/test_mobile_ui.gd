@@ -9,9 +9,15 @@ var keyboard_px := 0
 class ReplyRecorder extends Node:
 	var requests := 0
 	var message := ""
+	var chat_ui: ChatUI
 	func request_reply(_profile: Dictionary, text: String, _history: Array, _category = 0) -> void:
 		requests += 1
 		message = text
+		# Networking now owns an explicit busy interval; the UI fixture completes
+		# it asynchronously without running gameplay rules in a layout test.
+		chat_ui.call_deferred("_on_llm_response_generated", {"response": "Test reply.",
+			"threshold_decision": {"transfer_amount": 0, "trust_delta": 0,
+				"suspicion_delta": 0, "outcome": ScamManager.ScamOutcome.SOCIAL_CHAT}})
 
 func _init() -> void:
 	call_deferred("run")
@@ -46,6 +52,7 @@ func run() -> void:
 	var recorder := ReplyRecorder.new()
 	world.add_child(recorder)
 	chat.local_llm = recorder
+	recorder.chat_ui = chat
 	layout.metrics_source = metrics
 	check(joy.base_texture == null and joy.tip_texture == null and joy.show_direction_line, "Original procedural joystick")
 	check(joy.base_radius == 50 and joy.tip_radius == 20 and joy.clamp_zone == 50 and joy.deadzone == 0.05, "Original joystick geometry and deadzone")
@@ -67,6 +74,7 @@ func run() -> void:
 		var previous: int = recorder.requests
 		chat.message_input.text_submitted.emit(chat.message_input.text)
 		check(recorder.requests == previous + 1 and recorder.message == "Desktop Enter submission", "Enter submits once")
+		await settle()
 		chat.message_input.text = "Desktop mouse submission"
 		chat.send_btn.pressed.emit()
 		check(recorder.requests == previous + 2 and recorder.message == "Desktop mouse submission", "Send submits once")
@@ -133,6 +141,7 @@ func run() -> void:
 			chat.send_btn.pressed.emit()
 			check(recorder.requests == previous + 1 and recorder.message == "A visible pitch above the keyboard", "Mobile sends visible text exactly once")
 			check(not chat.message_input.has_focus(), "Send releases mobile keyboard focus")
+			await settle()
 			# Exercise one late reply after the final layout case; repeated replies
 			# would intentionally change NPC suspicion and contaminate UI fixtures.
 			if physical.x == 1600 and fraction == 0.6:
