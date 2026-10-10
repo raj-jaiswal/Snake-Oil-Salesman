@@ -1,0 +1,189 @@
+[gd_scene load_steps=5 format=3 uid="uid://cxab3title123"]
+
+[ext_resource type="Script" path="res://scenes/title_screen.gd" id="1_title"]
+[ext_resource type="Texture2D" uid="uid://titlebg456" path="res://assets/new_title_bg.png" id="2_bg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_normal"]
+bg_color = Color(0.18, 0.12, 0.08, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.68, 0.52, 0.22, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.28, 0.19, 0.13, 0.95)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.88, 0.72, 0.35, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+expand_margin_left = 5.0
+expand_margin_right = 5.0
+expand_margin_top = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.121569, 0.121569, 0.121569, 0.882353)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.678431, 0.556863, 0.313726, 1)
+
+[node name="TitleScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_title")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource("2_bg")
+expand_mode = 1
+stretch_mode = 6
+texture_filter = 1
+
+[node name="Buttons" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.256
+anchor_top = 0.447
+anchor_right = 0.408
+anchor_bottom = 0.740
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="StartBtn" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
+theme_override_font_sizes/font_size = 24
+text = "Start Game"
+
+[node name="ContinueBtn" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
+theme_override_font_sizes/font_size = 24
+text = "Continue"
+
+[node name="SettingsBtn" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
+theme_override_font_sizes/font_size = 24
+text = "Settings"
+
+[node name="QuitBtn" type="Button" parent="Buttons"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_default_cursor_shape = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn_normal")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxFlat_btn_hover")
+theme_override_font_sizes/font_size = 24
+text = "Quit"
+
+[node name="SettingsPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -100.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="SettingsPanel"]
+layout_mode = 2
+alignment = 1
+
+[node name="Title" type="Label" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="FullscreenBtn" type="Button" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "Toggle Fullscreen"
+
+[node name="CloseSettingsBtn" type="Button" parent="SettingsPanel/VBox"]
+layout_mode = 2
+text = "Close"
+
+[node name="ConfirmPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -75.0
+offset_right = 200.0
+offset_bottom = 75.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="ConfirmPanel"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="ConfirmPanel/VBox"]
+layout_mode = 2
+text = "Starting a new game will overwrite your existing save.
+Are you sure?"
+horizontal_alignment = 1
+
+[node name="HBox" type="HBoxContainer" parent="ConfirmPanel/VBox"]
+layout_mode = 2
+alignment = 1
+
+[node name="YesBtn" type="Button" parent="ConfirmPanel/VBox/HBox"]
+layout_mode = 2
+text = "Yes, Start New Game"
+
+[node name="NoBtn" type="Button" parent="ConfirmPanel/VBox/HBox"]
+layout_mode = 2
+text = "Cancel"

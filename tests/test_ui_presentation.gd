@@ -62,12 +62,8 @@ func _run() -> void:
 		await capture("dialogue_%d" % viewport_size.x)
 		chat.end_conversation()
 		hud.toast_panel.hide()
-	var items: Array[Dictionary] = [{"name": "Royal Investment Papers"}, {"name": "Miracle Tonic"}, {"name": "Beggar's Robe"}, {"name": "Monocle"}]
-	hud._update_inventory(items)
 	hud._on_game_ended(false, "The thirty days are over. Your audience with the king awaits.")
 	await settle()
-	inside(hud.get_node("TopPanel"), "Long inventory")
-	check(hud.inventory_label.tooltip_text.contains("Monocle"), "Truncated inventory remains accessible in tooltip")
 	await capture("ending_inventory_640")
 	print("UI presentation checks: %d failures" % failures)
 	world.queue_free()

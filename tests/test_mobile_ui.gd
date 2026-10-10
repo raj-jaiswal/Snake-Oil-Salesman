@@ -9,7 +9,7 @@ var keyboard_px := 0
 class ReplyRecorder extends Node:
 	var requests := 0
 	var message := ""
-	func request_reply(_profile: Dictionary, text: String, _history: Array) -> void:
+	func request_reply(_profile: Dictionary, text: String, _history: Array, _category = 0) -> void:
 		requests += 1
 		message = text
 

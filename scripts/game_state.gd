@@ -105,6 +105,7 @@ func use_item(item_id: String) -> bool:
 				else:
 					item["quantity"] = qty
 				emit_signal("item_added", item) # just to trigger ui refresh
+				save_game()
 				return true
 	return false
 
@@ -121,6 +122,7 @@ func add_kurtos(amount: int) -> void:
 		return
 	player_kurtos += amount
 	emit_signal("kurtos_changed", player_kurtos, amount)
+	save_game()
 	_check_win_condition()
 
 
@@ -130,6 +132,7 @@ func spend_kurtos(amount: int) -> bool:
 	if player_kurtos >= amount:
 		player_kurtos -= amount
 		emit_signal("kurtos_changed", player_kurtos, -amount)
+		save_game()
 		return true
 	return false
 
@@ -139,6 +142,7 @@ func modify_overall_trust(delta: int) -> void:
 	overall_trust = clampi(overall_trust + delta, 0, 100)
 	if overall_trust != prev:
 		emit_signal("overall_trust_changed", overall_trust, overall_trust - prev)
+		save_game()
 
 
 func advance_day() -> void:
@@ -156,6 +160,7 @@ func advance_day() -> void:
 	# Check 30-day limit
 	if current_day > max_days:
 		_evaluate_ending()
+	save_game()
 
 
 func has_item(item_id: String) -> bool:
@@ -173,6 +178,7 @@ func add_item(item_id: String, item_name: String = "", description: String = "",
 			if not is_debug and item.get("is_debug", false):
 				item["is_debug"] = false
 			emit_signal("item_added", item)
+			save_game()
 			return
 
 	var item_dict := {
@@ -193,12 +199,14 @@ func add_item(item_id: String, item_name: String = "", description: String = "",
 
 	inventory.append(item_dict)
 	emit_signal("item_added", item_dict)
+	save_game()
 
 
 func remove_item(item_id: String) -> bool:
 	for i in range(inventory.size()):
 		if inventory[i].get("id", "") == item_id:
 			inventory.remove_at(i)
+			save_game()
 			return true
 	return false
 
@@ -229,8 +237,73 @@ func reset_game() -> void:
 	overall_trust = 25
 	is_game_over = false
 	has_won = false
+	can_player_move = true
 	inventory.clear()
 	add_item("miracle_tonic_sample", "Miracle Tonic Sample", "A small bottle of colored sugar water.")
 	emit_signal("kurtos_changed", player_kurtos, 0)
 	emit_signal("day_changed", current_day)
 	emit_signal("overall_trust_changed", overall_trust, 0)
+
+func reset_game_keep_debug() -> void:
+	player_kurtos = 50
+	current_day = 1
+	overall_trust = 25
+	is_game_over = false
+	has_won = false
+	can_player_move = true
+	var debug_items = []
+	for item in inventory:
+		if item.get("is_debug", false):
+			debug_items.append(item)
+	inventory.clear()
+	for item in debug_items:
+		inventory.append(item)
+	add_item("miracle_tonic_sample", "Miracle Tonic Sample", "A small bottle of colored sugar water.")
+	emit_signal("kurtos_changed", player_kurtos, 0)
+	emit_signal("day_changed", current_day)
+	emit_signal("overall_trust_changed", overall_trust, 0)
+	save_game()
+
+func has_save() -> bool:
+	return FileAccess.file_exists("user://save_game.dat")
+
+func save_game() -> void:
+	var save_dict = {
+		"player_kurtos": player_kurtos,
+		"current_day": current_day,
+		"overall_trust": overall_trust,
+		"is_game_over": is_game_over,
+		"has_won": has_won,
+		"inventory": inventory
+	}
+	var file = FileAccess.open("user://save_game.dat", FileAccess.WRITE)
+	if file:
+		file.store_string(JSON.stringify(save_dict))
+
+func load_game() -> void:
+	if not has_save():
+		return
+	var file = FileAccess.open("user://save_game.dat", FileAccess.READ)
+	if file:
+		var json_string = file.get_as_text()
+		var json = JSON.new()
+		var error = json.parse(json_string)
+		if error == OK:
+			var data = json.data
+			player_kurtos = data.get("player_kurtos", 50)
+			current_day = data.get("current_day", 1)
+			overall_trust = data.get("overall_trust", 25)
+			is_game_over = data.get("is_game_over", false)
+			has_won = data.get("has_won", false)
+			can_player_move = true
+			
+			var loaded_inv = data.get("inventory", [])
+			inventory.clear()
+			for item in loaded_inv:
+				if item is Dictionary:
+					inventory.append(item)
+			
+			emit_signal("kurtos_changed", player_kurtos, 0)
+			emit_signal("day_changed", current_day)
+			emit_signal("overall_trust_changed", overall_trust, 0)
+
