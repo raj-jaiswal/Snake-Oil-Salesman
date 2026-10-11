@@ -685,4 +685,3 @@ func _cancel_pending_reply() -> void:
 		send_btn.disabled = false
 	if pitch_btn:
 		pitch_btn.disabled = false
-

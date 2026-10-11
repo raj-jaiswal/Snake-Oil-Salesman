@@ -12,14 +12,20 @@ extends StaticBody2D
 			$Sprite2D.texture = val
 		_update_building()
 
+@export var show_label: bool = false:
+	set(val):
+		show_label = val
+		if has_node("NameLabel"):
+			$NameLabel.visible = val and not building_name.is_empty()
+
 @export var building_name: String = "":
 	set(val):
 		building_name = val
 		if has_node("NameLabel"):
 			$NameLabel.text = val
-			$NameLabel.visible = not val.is_empty()
+			$NameLabel.visible = show_label and not val.is_empty()
 
-@export var match_asset_collider: bool = true:
+@export var match_asset_collider: bool = false:
 	set(val):
 		match_asset_collider = val
 		_update_building()
@@ -34,12 +40,12 @@ extends StaticBody2D
 		footprint_size = val
 		_update_building()
 
-@export var footprint_offset: Vector2 = Vector2(0, 35):
+@export var footprint_offset: Vector2 = Vector2(0, 20):
 	set(val):
 		footprint_offset = val
 		_update_building()
 
-@export var sprite_scale: Vector2 = Vector2(2.0, 2.0):
+@export var sprite_scale: Vector2 = Vector2(1.0, 1.0):
 	set(val):
 		sprite_scale = val
 		if has_node("Sprite2D"):
@@ -58,7 +64,7 @@ func _update_building() -> void:
 	
 	if has_node("NameLabel"):
 		$NameLabel.text = building_name
-		$NameLabel.visible = not building_name.is_empty()
+		$NameLabel.visible = show_label and not building_name.is_empty()
 	
 	_update_collision()
 
@@ -77,13 +83,15 @@ func _update_collision() -> void:
 		elif match_asset_collider and building_texture != null:
 			var pts := _extract_polygon_from_texture(building_texture)
 			if pts.size() > 0:
-				col_poly.polygon = pts
-				col_poly.disabled = false
-				if col_shape:
-					col_shape.disabled = true
-				return
+				var decomp := Geometry2D.decompose_polygon_in_convex(pts)
+				if decomp.size() > 0:
+					col_poly.polygon = pts
+					col_poly.disabled = false
+					if col_shape:
+						col_shape.disabled = true
+					return
 
-	# Fallback to rectangular collision shape if polygon matching not used
+	# Fallback to rectangular collision shape if polygon matching not used or failed
 	if col_shape != null:
 		if col_shape.shape == null or not (col_shape.shape is RectangleShape2D):
 			col_shape.shape = RectangleShape2D.new()
@@ -92,6 +100,7 @@ func _update_collision() -> void:
 		col_shape.disabled = false
 		if col_poly != null:
 			col_poly.disabled = true
+			col_poly.polygon = PackedVector2Array()
 
 
 func _get_collision_polygon_node() -> CollisionPolygon2D:

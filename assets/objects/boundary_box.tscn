@@ -5,17 +5,17 @@
 [node name="BoundaryBox" type="Node2D"]
 
 [node name="WallTop" parent="." instance=ExtResource("1_wall")]
-position = Vector2(576, -16)
-size = Vector2(1200, 32)
+position = Vector2(1280, -32)
+size = Vector2(2700, 64)
 
 [node name="WallBottom" parent="." instance=ExtResource("1_wall")]
-position = Vector2(576, 664)
-size = Vector2(1200, 32)
+position = Vector2(1280, 1952)
+size = Vector2(2700, 64)
 
 [node name="WallLeft" parent="." instance=ExtResource("1_wall")]
-position = Vector2(-16, 324)
-size = Vector2(32, 680)
+position = Vector2(-32, 960)
+size = Vector2(64, 2100)
 
 [node name="WallRight" parent="." instance=ExtResource("1_wall")]
-position = Vector2(1168, 324)
-size = Vector2(32, 680)
+position = Vector2(2592, 960)
+size = Vector2(64, 2100)

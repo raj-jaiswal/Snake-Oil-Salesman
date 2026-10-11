@@ -5,18 +5,18 @@
 [ext_resource type="Theme" path="res://ui/themes/medieval_theme.tres" id="medieval"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_footprint"]
-size = Vector2(140, 60)
+size = Vector2(80, 36)
 
 [node name="VillageBuilding" type="StaticBody2D"]
 script = ExtResource("1_bld")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(2, 2)
+scale = Vector2(1, 1)
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 35)
+position = Vector2(0, 20)
 shape = SubResource("RectangleShape2D_footprint")
 disabled = true
 

@@ -10,7 +10,7 @@ extends StaticBody2D
 		if has_node("Sprite2D"):
 			$Sprite2D.texture = val
 
-@export var tree_scale: Vector2 = Vector2(2.0, 2.0):
+@export var tree_scale: Vector2 = Vector2(1.0, 1.0):
 	set(val):
 		tree_scale = val
 		if has_node("Sprite2D"):

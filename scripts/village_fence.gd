@@ -14,7 +14,7 @@ extends StaticBody2D
 		tile_count = maxi(1, val)
 		_update_fence()
 
-@export var fence_scale: float = 2.0:
+@export var fence_scale: float = 1.0:
 	set(val):
 		fence_scale = maxf(1.0, val)
 		_update_fence()
